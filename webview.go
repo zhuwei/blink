@@ -285,3 +285,7 @@ func (view *WebView) DestroyWindow() {
 		<-done
 	}
 }
+
+func (view *WebView) GetHandle() win.HWND {
+	return view.handle
+}
