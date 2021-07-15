@@ -363,3 +363,21 @@ func (view *WebView) SetEnabledDropFiles(value bool) {
 	view.dropFiles = value
 	win.DragAcceptFiles(view.GetHandle(), value)
 }
+
+func (view *WebView) SetHeadlessEnabled(value bool) {
+	done := make(chan bool)
+	jobQueue <- func() {
+		C.setHeadlessEnabled(view.window, C.bool(value))
+		close(done)
+	}
+	<-done
+}
+
+func (view *WebView) SetCookie(url string, cookie string) {
+	done := make(chan bool)
+	jobQueue <- func() {
+		C.setCookie(view.window, C.CString(url), C.CString(cookie))
+		close(done)
+	}
+	<-done
+}

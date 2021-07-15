@@ -6,13 +6,14 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/json-iterator/go"
-	"github.com/modern-go/reflect2"
 	"reflect"
 	"strings"
 	"text/template"
 	"time"
 	"unsafe"
+
+	"github.com/json-iterator/go"
+	"github.com/modern-go/reflect2"
 )
 
 //js内容模板
@@ -361,4 +362,39 @@ func (view *WebView) Invoke(path string, args ...interface{}) (returnValue jsoni
 	} else {
 		return nil, errors.New(resultJson.Get("Message").ToString())
 	}
+}
+
+//执行js代码，返回值
+func (view *WebView) RunJS(code string) (returnValue string, err error) {
+	if view.IsDestroy {
+		return "", errors.New("WebView已经被销毁")
+	}
+
+	//所有的调用必须等待文档ready,且没有webview没有destroy
+	select {
+	case <-view.DocumentReady:
+		break
+	case <-view.Destroy:
+		//view已经destroy
+		return "", errors.New("WebView已经被销毁")
+	default:
+		//允许未ready时执行
+		break
+		//return "", errors.New("WebView未加载画面")
+	}
+
+	defer func() {
+		//处理未捕获的异常
+		if e := recover(); e != nil {
+			returnValue = ""
+			err = errors.New(fmt.Sprint(e))
+		}
+	}()
+
+	done := make(chan string)
+	jobQueue <- func() {
+		result := C.runJSProxy(view.window, C.CString(code))
+		done <- C.GoString(result)
+	}
+	return <-done, nil
 }

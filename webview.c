@@ -61,3 +61,13 @@ void showDevTools(wkeWebView window)
 {
     wkeShowDevtools(window, L"http://__devtools__/inspector.html", onShowDevtoolsCallback, NULL);
 }
+
+void setHeadlessEnabled(wkeWebView window, bool isEnabled)
+{
+    wkeSetHeadlessEnabled(window, isEnabled);
+}
+
+void setCookie(wkeWebView window, char *url, char *cookie)
+{
+    wkeSetCookie(window, url, cookie);
+}
