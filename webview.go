@@ -3,8 +3,8 @@ package blink
 //#include "webview.h"
 import "C"
 import (
-	"os"
-	"path/filepath"
+	//"os"
+	//"path/filepath"
 	"syscall"
 	"unsafe"
 
