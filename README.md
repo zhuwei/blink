@@ -21,7 +21,7 @@
 
 ## 安装
 ```bash
-go get github.com/raintean/blink
+go get github.com/zhuwei/blink
 ```
 
 ## 示例
