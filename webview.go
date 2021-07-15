@@ -323,7 +323,7 @@ func (view *WebView) GetHandle() win.HWND {
 	return view.handle
 }
 
-func (view *WebView) SetWindowIcon(s string) {
+/*func (view *WebView) SetWindowIcon(s string) {
 	done := make(chan bool)
 	jobQueue <- func() {
 		defer close(done)
@@ -358,6 +358,7 @@ func (view *WebView) SetWindowIcon(s string) {
 	}
 	<-done
 }
+*/
 
 func (view *WebView) SetEnabledDropFiles(value bool) {
 	view.dropFiles = value
